@@ -1,0 +1,42 @@
+#daily_tool {
+	position: fixed;
+	bottom: 0;
+	z-index: 10000;
+	width: 100%;
+	background: rgba(200,200,200,.95);
+	border-top: solid #000 1px;
+	padding: 0 .5em;
+	box-sizing: border-box;
+}
+
+h6,
+#lineupParams {
+	display: inline-block;
+}
+
+#lineupParams {
+	margin-left: 1em;
+}
+
+button {
+	float: right;
+	cursor: pointer;
+	background-color: #00c073;
+	padding: .5em;
+	margin-left: 1em;
+	box-sizing: border-box;
+}
+
+#isLocal {
+	float: right;
+}
+
+.ctaloading {
+	opacity: .3;
+}
+
+#error {
+	display: inline-block;
+	width: 100%;
+	color: #f00;
+}
