@@ -26,7 +26,7 @@ if(headerElem == null) {
 
   function setContestId() {
     idElem = document.querySelector('.export-to-csv');
-    groupId = idElem.href.split('draftGroupId=')[1];
+    if(idElem) groupId = idElem.href.split('draftGroupId=')[1];
     lineupId = idElem.href.split('lineupId=')[1];
 
     errorElm.innerText = '';
@@ -67,21 +67,32 @@ if(headerElem == null) {
 
   function setPlayerLineup() {
     if (groupId || lineupId) {
-      var playerList = document.getElementById('playerList');
+      var playerList = document.getElementById('playerList').value.split(',');
 
       var exeJs = '';
-      PlayersToSet = [];
+      var errorList = '';
+      var PlayersToSet = [];
 
       console.log(playerData);
-      // PlayersToSet.forEach(function(item, i){
-      //   exeJs += 'lineupModManager.getInstance().draftPlayer(' + item.playerid + ', ' + item.scheduleid + ');'
-      // });
-      // var script = document.createElement('script');
-      //   script.id = 'tmpScript';
-      //   script.appendChild(document.createTextNode(exeJs));
-      // headerElem.appendChild(script);
-      // headerElem.removeAttribute('players');
-      // headerElem.removeChild(script);
+      playerList.forEach(function(plyr){
+        var plyrObj = playerData.playerList.filter(function( obj ) {
+          return plyr.trim() === obj.fn + ' ' + obj.ln;
+        })[0];
+        if (plyrObj && plyrObj.pid && plyrObj.s) {
+          PlayersToSet.push(plyrObj);
+          exeJs += 'lineupModManager.getInstance().draftPlayer(' + plyrObj.pid + ', ' + plyrObj.s + ');'
+        } else {
+          errorList += plyr + ' not found. '
+        }
+      });
+      errorElm.innerText = errorList;
+        
+      var script = document.createElement('script');
+      script.id = 'tmpScript';
+      script.appendChild(document.createTextNode(exeJs));
+      headerElem.appendChild(script);
+      headerElem.removeAttribute('players');
+      headerElem.removeChild(script);
     } else {
       errorElm.innerText = 'Missing Group/Linup ID';
     }
